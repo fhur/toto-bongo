@@ -4,20 +4,16 @@ require 'rake'
 begin
   require 'jeweler'
   Jeweler::Tasks.new do |gem|
-    gem.name = "toto"
-    gem.summary = %Q{the tiniest blog-engine in Oz}
-    gem.description = %Q{the tiniest blog-engine in Oz.}
-    gem.email = "self@cloudhead.net"
-    gem.homepage = "http://github.com/cloudhead/toto"
-    gem.authors = ["cloudhead"]
+    gem.name = "toto-bongo"  
+    gem.summary = %Q{Tiny blog for your existing app}
+    gem.description = %Q{Minimal blog forked from toto to use with your existing app}
+    gem.email = "danpal@gmail.com"
+    gem.homepage = "https://github.com/danpal/toto-bongo"
+    gem.authors = ["daniel palacio || cloudhead"]
     gem.add_development_dependency "riot"
     gem.add_dependency "builder"
     gem.add_dependency "rack"
-    if RUBY_PLATFORM =~ /win32/
-      gem.add_dependency "maruku"
-    else
-      gem.add_dependency "rdiscount"
-    end
+    gem.add_dependency "rdiscount"
   end
   Jeweler::GemcutterTasks.new
 rescue LoadError
@@ -33,3 +29,4 @@ end
 
 task :test => :check_dependencies
 task :default => :test
+

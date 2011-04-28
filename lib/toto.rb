@@ -1,6 +1,6 @@
 require 'yaml'
 require 'date'
-require 'erb'
+require 'haml'
 require 'rack'
 require 'digest'
 require 'open-uri'
@@ -300,7 +300,7 @@ module Toto
         ERB.new(File.read("#{path}/#{page}.rhtml")).result(ctx)
       },
       :error => lambda {|code|                              # The HTML for your error page
-        "<font style='font-size:300%'>toto, we're not in Kansas anymore (#{code})</font>"
+        "<font style='font-size:300%'>toto-bongo error (#{code})</font>"
       }
     }
     def initialize obj
