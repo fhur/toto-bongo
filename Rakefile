@@ -7,9 +7,8 @@ begin
     gem.name = "toto-bongo"  
     gem.summary = %Q{Tiny blog for your existing app}
     gem.description = %Q{Minimal blog forked from toto to use with your existing app}
-    gem.email = "danpal@gmail.com"
     gem.homepage = "https://github.com/danpal/toto-bongo"
-    gem.authors = ["daniel palacio || cloudhead"]
+    gem.authors = ["Daniel Palacio"]
     gem.add_development_dependency "riot"
     gem.add_dependency "builder"
     gem.add_dependency "rack"
