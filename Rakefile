@@ -12,7 +12,7 @@ begin
     gem.add_development_dependency "riot"
     gem.add_dependency "builder"
     gem.add_dependency "rack"
-    gem.add_dependency "rdiscount"
+    gem.add_dependency "RedCloth"
   end
   Jeweler::GemcutterTasks.new
 rescue LoadError

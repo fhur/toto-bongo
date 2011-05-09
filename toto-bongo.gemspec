@@ -5,13 +5,12 @@
 
 Gem::Specification.new do |s|
   s.name = %q{toto-bongo}
-  s.version = "1.0"
+  s.version = "1.0.0"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
-  s.authors = ["daniel palaci"]
-  s.date = %q{2011-04-28}
+  s.authors = ["Daniel Palacio"]
+  s.date = %q{2011-05-09}
   s.description = %q{Minimal blog forked from toto to use with your existing app}
-  s.email = %q{danpal@gmail.com}
   s.extra_rdoc_files = [
     "LICENSE",
     "README.md"
@@ -60,18 +59,18 @@ Gem::Specification.new do |s|
       s.add_development_dependency(%q<riot>, [">= 0"])
       s.add_runtime_dependency(%q<builder>, [">= 0"])
       s.add_runtime_dependency(%q<rack>, [">= 0"])
-      s.add_runtime_dependency(%q<rdiscount>, [">= 0"])
+      s.add_runtime_dependency(%q<RedCloth>, [">= 0"])
     else
       s.add_dependency(%q<riot>, [">= 0"])
       s.add_dependency(%q<builder>, [">= 0"])
       s.add_dependency(%q<rack>, [">= 0"])
-      s.add_dependency(%q<rdiscount>, [">= 0"])
+      s.add_dependency(%q<RedCloth>, [">= 0"])
     end
   else
     s.add_dependency(%q<riot>, [">= 0"])
     s.add_dependency(%q<builder>, [">= 0"])
     s.add_dependency(%q<rack>, [">= 0"])
-    s.add_dependency(%q<rdiscount>, [">= 0"])
+    s.add_dependency(%q<RedCloth>, [">= 0"])
   end
 end
 

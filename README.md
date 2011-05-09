@@ -8,20 +8,14 @@ This is very useful for SEO optimization
 introduction
 ------------
 
-toto bongo is a git-powered, minimalist blog engine forked from toto. The engine weighs around ~300 sloc at its worse.
+toto-bongo is a git-powered, minimalist blog engine forked from toto. 
 There is no toto client, at least for now; everything goes through git.
 
 blog in your app in 10 seconds
 ------------------
 
-Everything that can be done better with another tool should be, but one should not have too much pie to stay fit.
-In other words, toto does away with web frameworks or DSLs such as sinatra, and is built right on top of **rack**.
-There is no database or ORM either, we use plain text files.
-
-Toto was designed to be used with a reverse-proxy cache, such as [Varnish](http://varnish-cache.org).
+Toto-bongo was designed to be used with a reverse-proxy cache, such as [Varnish](http://varnish-cache.org).
 This makes it an ideal candidate for [heroku](http://heroku.com).
-
-Oh, and everything that can be done with git, _is_.
 
 how it works
 ------------
@@ -42,8 +36,6 @@ how it works
 
 toto-blog
 -------
-
-
 
 ### deployment
 
@@ -96,6 +88,10 @@ you could add `set :author, 'John Galt'` inside the `Toto::Server.new` block. He
     set :error     do |code|                                    # The HTML for your error page
       "<font style='font-size:300%'>toto, we're not in Kansas anymore (#{code})</font>"
     end
+
+### Development
+
+
 
 thanks
 ------

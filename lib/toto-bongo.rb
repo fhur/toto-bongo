@@ -4,21 +4,17 @@ require 'haml'
 require 'rack'
 require 'digest'
 require 'open-uri'
-
-if RUBY_PLATFORM =~ /win32/
-  require 'maruku'
-  Markdown = Maruku
-else
-  require 'rdiscount'
-end
-
+require 'RedCloth'
 require 'builder'
 
 $:.unshift File.dirname(__FILE__)
 
 require 'ext/ext'
 
-module Toto
+#
+# TotoBongo
+#
+module TotoBongo
   Paths = {
     :templates => "templates",
     :pages => "templates/pages",
@@ -33,7 +29,16 @@ module Toto
     ENV['RACK_ENV'] = env
   end
 
+  #
+  # Handles all templating options
+  # Is responsible for:
+  #
+  #
   module Template
+
+    #
+    #
+    #
     def to_html page, config, &blk
       path = ([:layout, :repo].include?(page) ? Paths[:templates] : Paths[:pages])
       config[:to_html].call(path, page, binding)
@@ -47,17 +52,28 @@ module Toto
       end
     end
 
+    #
+    # Intercept any method missing 
+    #
     def method_missing m, *args, &blk
       self.keys.include?(m) ? self[m] : super
     end
+
 
     def self.included obj
       obj.class_eval do
         define_method(obj.to_s.split('::').last.downcase) { self }
       end
     end
-  end
+  
+  end #Template
 
+  #
+  # Site
+  # Is responsible for
+  #
+  #
+  
   class Site
     def initialize config
       @config = config
@@ -130,6 +146,8 @@ module Toto
     else
       return :body => body || "", :type => type, :status => status || 200
     end
+
+
 
   protected
 
@@ -282,7 +300,15 @@ module Toto
     alias :to_s to_html
   end
 
+
+
+
   class Config < Hash
+
+    #
+    #This is the hash that stores all teh configuation options
+    #
+
     Defaults = {
       :author => ENV['USER'],                               # blog author
       :title => Dir.pwd.split('/').last,                    # site title
@@ -297,12 +323,14 @@ module Toto
       :cache => 28800,                                      # cache duration (seconds)
       :github => {:user => "", :repos => [], :ext => 'md'}, # Github username and list of repos
       :to_html => lambda {|path, page, ctx|                 # returns an html, from a path & context
-        ERB.new(File.read("#{path}/#{page}.rhtml")).result(ctx)
+        Haml::Engine.new(File.read("#{path}/#{page}.haml")).result(ctx)
       },
       :error => lambda {|code|                              # The HTML for your error page
         "<font style='font-size:300%'>toto-bongo error (#{code})</font>"
       }
     }
+
+    
     def initialize obj
       self.update Defaults
       self.update obj
@@ -317,14 +345,16 @@ module Toto
     end
   end
 
+
   class Server
     attr_reader :config, :site
 
     def initialize config = {}, &blk
       @config = config.is_a?(Config) ? config : Config.new(config)
       @config.instance_eval(&blk) if block_given?
-      @site = Toto::Site.new(@config)
+      @site = TotoBongo::Site.new(@config)
     end
+
 
     def call env
       @request  = Rack::Request.new env
@@ -342,7 +372,7 @@ module Toto
       @response['Content-Type']   = Rack::Mime.mime_type(".#{response[:type]}")
 
       # Set http cache headers
-      @response['Cache-Control'] = if Toto.env == 'production'
+      @response['Cache-Control'] = if TotoBongo.env == 'production'
         "public, max-age=#{@config[:cache]}"
       else
         "no-cache, must-revalidate"
