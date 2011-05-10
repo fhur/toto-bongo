@@ -6,7 +6,7 @@ begin
   Jeweler::Tasks.new do |gem|
     gem.name = "toto-bongo"  
     gem.summary = %Q{Tiny blog for your existing app}
-    gem.description = %Q{Minimal blog forked from toto to use with your existing app}
+    gem.description = %Q{Minimal blog to use with your existing app}
     gem.homepage = "https://github.com/danpal/toto-bongo"
     gem.authors = ["Daniel Palacio"]
     gem.add_development_dependency "riot"

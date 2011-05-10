@@ -9,20 +9,109 @@ introduction
 ------------
 
 toto-bongo is a git-powered, minimalist blog engine forked from toto. 
-There is no toto client, at least for now; everything goes through git.
+There is no toto client, and there probably will never be, everything goes through git.
+From the security stand point, this makes toto-bongo very secure. By
+reducing the attack surface( we don't handle any user input) we've made
+a blog you can trust. 
+Other blogs have administration panels, sessions, cookies etc, that lead
+to security vulnerabilities, toto-bongo has non of that.
 
 blog in your app in 10 seconds
 ------------------
 
 Toto-bongo was designed to be used with a reverse-proxy cache, such as [Varnish](http://varnish-cache.org).
-This makes it an ideal candidate for [heroku](http://heroku.com).
+This makes it an ideal candidate for **[heroku](http://heroku.com)**.
+
+This is how to deploy in your existing app:
+
+1. git clone git@github.com:danpal/toto-bongo-blog.git
+2. Look at toto-bongo-blog Gemfile, add the following gems to your
+   Gemfile.
+  
+  gem 'toto-bongo'
+  gem 'builder'
+  gem 'RedCloth'
+  gem 'haml'
+  
+3. Toto-bongo runs on rack, you need to modify your existing config.ru
+we provide you with an already existing config.ru, take a look at
+toto-bongo-blog config.ru
+(note this file might be outdated here, look at the one in the
+toto-bongo-blog)
+<pre><code>
+    # This file is used by Rack-based servers to start the application.
+    require 'toto-bongo'
+    require ::File.expand_path('../config/environment', __FILE__)
+    
+    #point to your rails apps /public directory
+    use Rack::Static, :urls => ['/stylesheets', '/javascripts', '/images', '/favicon.ico'], :root => 'public'
+    
+    use Rack::ShowExceptions
+    use Rack::CommonLogger
+    
+    #run the toto application
+    toto_bongo = TotoBongo::Server.new do
+    
+      #override the default location for the toto directories
+      TotoBongo::Paths = {
+        :templates => "blog/templates",
+        :pages => "blog/templates/pages",
+        :articles => "blog/articles"
+      }
+    
+      # set your config variables here
+      set :title, 'toto-bongo blog'
+      set :date, lambda {|now| now.strftime("%B #{now.day.ordinal} %Y") }
+      set :summary, :max => 500
+      set :root, 'index'
+      set :prefix, 'blog'
+    
+      if RAILS_ENV != 'production'
+        set :url, "http://localhost:3000/blog/"
+      else
+        set :url, "http://toto-bongo.heroku.com/blog/" #EDIT THIS TO ADD YOUR OWN URL
+      end
+    end
+    
+    #create a rack app
+    app = Rack::Builder.new do
+      use Rack::CommonLogger
+    
+      #map requests to /blog to toto
+      map '/blog' do
+        run toto_bongo
+      end
+    
+      #map all the other requests to rails
+      map '/' do
+        if Rails.version.to_f >= 3.0
+          ActionDispatch::Static
+          #run [ApplicationName]::Application
+          run TotoBongoBlog::Application #change for your application name
+        else # Rails 2
+          use Rails::Rack::Static
+          run ActionController::Dispatcher.new
+        end
+      end
+    end.to_app
+    
+</code></pre>
+
+Then make the following changes
+  1. Change :title
+  2. Run TotoBongoBlog::Application #change for your application name
+  
+
+
+
+
 
 how it works
 ------------
 
 - content is entirely managed through **git**; you get full fledged version control for free.
 - articles are stored as _.txt_ files, with embeded metadata (in yaml format).
-- articles are processed through a markdown converter (rdiscount) by default.
+- articles are processed through a textile converter(RedCloth) by default.
 - templating is done through **HAML**.
 - toto is built right on top of **Rack**.
 - toto was built to take advantage of _HTTP caching_.
@@ -54,16 +143,6 @@ With unicorn, you can just do:
 
     $ unicorn
 
-#### on heroku
-
-Toto was designed to work well with [heroku](http://heroku.com), it makes the most out of it's state-of-the-art caching,
-by setting the _Cache-Control_ and _Etag_ HTTP headers. Deploying on Heroku is really easy, just get the heroku gem,
-create a heroku app with `heroku create`, and push with `git push heroku master`.
-
-    $ heroku create weblog
-    $ git push heroku master
-    $ heroku open
-
 ### configuration
 
 You can configure toto, by modifying the _config.ru_ file. For example, if you want to set the blog author to 'John Galt',
@@ -72,10 +151,9 @@ you could add `set :author, 'John Galt'` inside the `Toto::Server.new` block. He
     set :author,      ENV['USER']                               # blog author
     set :title,       Dir.pwd.split('/').last                   # site title
     set :url,         'http://example.com'                      # site root URL
-    set :prefix,      ''                                        # common path prefix for all pages
+    set :prefix,      'blog'                                        # common path prefix for all pages
     set :root,        "index"                                   # page to load on /
     set :date,        lambda {|now| now.strftime("%d/%m/%Y") }  # date format for articles
-    set :markdown,    :smart                                    # use markdown + smart-mode
     set :disqus,      false                                     # disqus id, or false
     set :summary,     :max => 150, :delim => /~\n/              # length of article summary and delimiter
     set :ext,         'txt'                                     # file extension for articles
@@ -86,10 +164,17 @@ you could add `set :author, 'John Galt'` inside the `Toto::Server.new` block. He
     end
 
     set :error     do |code|                                    # The HTML for your error page
-      "<font style='font-size:300%'>toto, we're not in Kansas anymore (#{code})</font>"
+      "<font style='font-size:300%'>toto-bongo, error (#{code})</font>"
     end
 
 ### Development
+
+rake gemspec: To generate the gemspec
+gem build toto-bongo.gemspec to build
+
+If you are developing use the following enviromental variable to get
+some debugging output
+export TOTODEBUG=true 
 
 
 
@@ -97,4 +182,5 @@ thanks
 ------
 
 To toto team, as they are the real developers behind toto.
+
 
