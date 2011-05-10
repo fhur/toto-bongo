@@ -1,14 +1,15 @@
-toto bongo
+Toto bongo
 ====
+
 
 Minimal blog forked from toto to use for your existing app's. 
 This is very useful for SEO optimization
+See http://toto-bongo.heroku.com/
 
-
-introduction
+Tntroduction
 ------------
 
-toto-bongo is a git-powered, minimalist blog engine forked from toto. 
+Toto-bongo is a git-powered, minimalist blog engine forked from toto. 
 There is no toto client, and there probably will never be, everything goes through git.
 From the security stand point, this makes toto-bongo very secure. By
 reducing the attack surface( we don't handle any user input) we've made
@@ -28,9 +29,11 @@ This is how to deploy in your existing app:
 2. Look at toto-bongo-blog Gemfile, add the following gems to your
    Gemfile.
   
-  gem 'toto-bongo'
-  gem 'RedCloth'
-  gem 'haml'
+  -gem 'toto-bongo'
+  
+  -gem 'RedCloth'
+  
+  -gem 'haml'
   
 3. Toto-bongo runs on rack, you need to modify your existing config.ru
 we provide you with an already existing config.ru, take a look at toto-bongo-blog
