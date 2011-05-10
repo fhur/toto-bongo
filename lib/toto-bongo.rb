@@ -128,9 +128,6 @@ module TotoBongo
       @config.set key, value
     end
 
-    
-    
-    #
     #Called when index is requested
     #
     def index type = :html
@@ -141,7 +138,8 @@ module TotoBongo
         Article.new article, @config
       end}.merge archives
     end
-
+    
+    
     # 
     # Called in index After initializing the article
     # 
@@ -304,8 +302,10 @@ module TotoBongo
         TotoBongo::logger.debug("Context::missing_method #{m}")
         @context.respond_to?(m) ? @context.send(m, *args, &blk) : super
       end
-    end
-  end
+    
+    end #end class contex
+  
+  end #End site 
 
 
   class Archives < Array
@@ -449,14 +449,14 @@ module TotoBongo
     #This is the hash that stores all teh configuation options
     #
 
-    Defaults = {Default
+    Defaults = {
       :author => ENV['USER'],                               # blog author
       :title => Dir.pwd.split('/').last,                    # blog index title
-      :description => "Blog for your existing rails app"    # blog meta description
-      :keywords => "blog rails existing"                    # blog meta keywords
+      :description => "Blog for your existing rails app",   # blog meta description
+      :keywords => "blog rails existing",                   # blog meta keywords
       :root => "index",                                     # site index
       :url => "http://127.0.0.1",                           # root URL of the site
-      :prefix => "",                                        # common path prefix for the blog
+      :prefix => "blog",                                        # common path prefix for the blog
       :date => lambda {|now| now.strftime("%d/%m/%Y") },    # date function
       :disqus => false,                                     # disqus name
       :summary => {:max => 150, :delim => /~\n/},           # length of summary and delimiter
