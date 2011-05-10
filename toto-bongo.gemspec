@@ -5,7 +5,7 @@
 
 Gem::Specification.new do |s|
   s.name = %q{toto-bongo}
-  s.version = "1.0.0"
+  s.version = "1.0.2"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Daniel Palacio"]
@@ -38,7 +38,6 @@ Gem::Specification.new do |s|
     "test/templates/layout.html.haml",
     "test/test_helper.rb",
     "test/toto_test.rb",
-    "toto-bongo-1.0.0.gem",
     "toto-bongo.gemspec"
   ]
   s.homepage = %q{https://github.com/danpal/toto-bongo}

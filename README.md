@@ -29,82 +29,16 @@ This is how to deploy in your existing app:
    Gemfile.
   
   gem 'toto-bongo'
-  gem 'builder'
   gem 'RedCloth'
   gem 'haml'
   
 3. Toto-bongo runs on rack, you need to modify your existing config.ru
-we provide you with an already existing config.ru, take a look at
-toto-bongo-blog config.ru
-(note this file might be outdated here, look at the one in the
-toto-bongo-blog)
-<pre><code>
-    # This file is used by Rack-based servers to start the application.
-    require 'toto-bongo'
-    require ::File.expand_path('../config/environment', __FILE__)
-    
-    #point to your rails apps /public directory
-    use Rack::Static, :urls => ['/stylesheets', '/javascripts', '/images', '/favicon.ico'], :root => 'public'
-    
-    use Rack::ShowExceptions
-    use Rack::CommonLogger
-    
-    #run the toto application
-    toto_bongo = TotoBongo::Server.new do
-    
-      #override the default location for the toto directories
-      TotoBongo::Paths = {
-        :templates => "blog/templates",
-        :pages => "blog/templates/pages",
-        :articles => "blog/articles"
-      }
-    
-      # set your config variables here
-      set :title, 'toto-bongo blog'
-      set :date, lambda {|now| now.strftime("%B #{now.day.ordinal} %Y") }
-      set :summary, :max => 500
-      set :root, 'index'
-      set :prefix, 'blog'
-    
-      if RAILS_ENV != 'production'
-        set :url, "http://localhost:3000/blog/"
-      else
-        set :url, "http://toto-bongo.heroku.com/blog/" #EDIT THIS TO ADD YOUR OWN URL
-      end
-    end
-    
-    #create a rack app
-    app = Rack::Builder.new do
-      use Rack::CommonLogger
-    
-      #map requests to /blog to toto
-      map '/blog' do
-        run toto_bongo
-      end
-    
-      #map all the other requests to rails
-      map '/' do
-        if Rails.version.to_f >= 3.0
-          ActionDispatch::Static
-          #run [ApplicationName]::Application
-          run TotoBongoBlog::Application #change for your application name
-        else # Rails 2
-          use Rails::Rack::Static
-          run ActionController::Dispatcher.new
-        end
-      end
-    end.to_app
-    
-</code></pre>
+we provide you with an already existing config.ru, take a look at toto-bongo-blog
+config.ru
 
 Then make the following changes
   1. Change :title
   2. Run TotoBongoBlog::Application #change for your application name
-  
-
-
-
-
 
 how it works
 ------------

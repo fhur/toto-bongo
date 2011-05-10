@@ -6,7 +6,7 @@ require 'digest'
 require 'open-uri'
 require 'RedCloth'
 require 'builder'
-require 'Logger'
+require 'logger'
 $:.unshift File.dirname(__FILE__)
 
 require 'ext/ext'
@@ -138,10 +138,10 @@ module TotoBongo
         Article.new article, @config
       end}.merge archives
     end
-    
-    
+
     # 
-    # Called in index After initializing the article
+    # Makes the list's of all articles
+    # pages/archives.html.haml with access to :archives to generate the full list of posts
     # 
     def archives filter = ""
       TotoBongo::logger.debug("Called Site::archive ")
@@ -520,7 +520,13 @@ module TotoBongo
       route = (path || '/').split('/').reject {|i| i.empty? }
 
       response = @site.go(route, env, *(mime ? mime : []))
-
+      
+      TotoBongo.logger.debug("Line 524 response class = #{response.class}")
+      TotoBongo.logger.debug("Line 526 @esponse class = #{@response.class}")
+      TotoBongo.logger.debug("Line 526 @response.body class = #{@response.body.class}")
+      TotoBongo.logger.debug("Line 525 response = #{response}")
+      TotoBongo.logger.debug("Line 527 @response = #{@response}")
+      
       @response.body = [response[:body]]
       @response['Content-Length'] = response[:body].length.to_s unless response[:body].empty?
       @response['Content-Type']   = Rack::Mime.mime_type(".#{response[:type]}")
