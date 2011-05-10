@@ -216,10 +216,10 @@ module TotoBongo
     return body, status
 
     rescue Errno::ENOENT => e
-       TotoBongo::logger.debug("Errno:ENOENT: #{e.message} ")
+       TotoBongo::logger.info("Errno:ENOENT: #{e.message} ")
        return :body => http(404).first, :type => :html, :status => 404
     else
-      TotoBongo::logger.debug("Error status set 200")
+      TotoBongo::logger.debug("Status set 200 OK")
       return :body => body || "", :type => type, :status => status || 200
     end
 
@@ -275,6 +275,17 @@ module TotoBongo
         TotoBongo::logger.debug("Context::title")
         @config[:title]
       end
+      
+      def description
+        TotoBongo::logger.debug("Context::desciption")
+        @config[:description]
+      end
+    
+      def keywords
+        TotoBongo::logger.debug("Context::keywords")
+        @config[:keywords]
+      end
+
 
       def render page, type
         TotoBongo::logger.debug("Context::render")
@@ -353,7 +364,7 @@ module TotoBongo
     # Called by path when constructing the SEO url
     #
     def [] key
-      TotoBongo::logger.debug("Article::key")
+      TotoBongo::logger.debug("Article::key: key = #{key}")
 
       self.load unless self.tainted?
       super
@@ -396,11 +407,37 @@ module TotoBongo
       "/#{@config[:prefix]}#{self[:date].strftime("/%Y/%m/%d/#{slug}/")}".squeeze('/')
     end
 
-    def title()   self[:title] || "an article"               end
-    def date()    @config[:date].call(self[:date])           end
-    def author()  self[:author] || @config[:author]          end
-    def to_html() self.load; super(:article, @config)        end
+    def title()   
+      TotoBongo::logger.debug("Article::title")
+      self[:title] || "an article"
+    end
+    def date() 
+      TotoBongo::logger.debug("Article::path")
+      @config[:date].call(self[:date])        
+ 
+    end
+    def author() 
+      TotoBongo::logger.debug("Article::path")
+      self[:author] || @config[:author]  
+    end
+    
+    def description()
+      TotoBongo::logger.debug("Article::path")
+      self[:description] || title()  
+    end
+      
+    def keywords()
+      TotoBongo::logger.debug("Article::keywords")
+      self[:keywords] || title()  
+    end
+
+
+    def to_html() 
+      TotoBongo::logger.debug("Article::path")
+      self.load; super(:article, @config) 
+    end
     alias :to_s to_html
+  
   end
 
 
@@ -412,9 +449,11 @@ module TotoBongo
     #This is the hash that stores all teh configuation options
     #
 
-    Defaults = {
+    Defaults = {Default
       :author => ENV['USER'],                               # blog author
-      :title => Dir.pwd.split('/').last,                    # site title
+      :title => Dir.pwd.split('/').last,                    # blog index title
+      :description => "Blog for your existing rails app"    # blog meta description
+      :keywords => "blog rails existing"                    # blog meta keywords
       :root => "index",                                     # site index
       :url => "http://127.0.0.1",                           # root URL of the site
       :prefix => "",                                        # common path prefix for the blog
