@@ -39,6 +39,7 @@ Gem::Specification.new do |s|
     "test/templates/repo.rhtml",
     "test/test_helper.rb",
     "test/toto_test.rb",
+    "toto-bongo-1.0.0.gem",
     "toto-bongo.gemspec"
   ]
   s.homepage = %q{https://github.com/danpal/toto-bongo}
