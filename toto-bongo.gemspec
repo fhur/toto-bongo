@@ -9,8 +9,8 @@ Gem::Specification.new do |s|
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Daniel Palacio"]
-  s.date = %q{2011-05-09}
-  s.description = %q{Minimal blog forked from toto to use with your existing app}
+  s.date = %q{2011-05-10}
+  s.description = %q{Minimal blog to use with your existing app}
   s.extra_rdoc_files = [
     "LICENSE",
     "README.md"
@@ -29,14 +29,13 @@ Gem::Specification.new do |s|
     "test/articles/2009-12-04-some-random-article.txt",
     "test/articles/2009-12-11-the-dichotomy-of-design.txt",
     "test/autotest.rb",
-    "test/templates/about.rhtml",
-    "test/templates/archives.rhtml",
-    "test/templates/article.rhtml",
+    "test/templates/about.html.haml",
+    "test/templates/archives.html.haml",
+    "test/templates/article.html.haml",
     "test/templates/feed.builder",
     "test/templates/index.builder",
-    "test/templates/index.rhtml",
-    "test/templates/layout.rhtml",
-    "test/templates/repo.rhtml",
+    "test/templates/index.html.haml",
+    "test/templates/layout.html.haml",
     "test/test_helper.rb",
     "test/toto_test.rb",
     "toto-bongo-1.0.0.gem",
