@@ -6,7 +6,7 @@ Minimal blog forked from toto to use for your existing app's.
 This is very useful for SEO optimization
 See http://toto-bongo.heroku.com/
 
-Tntroduction
+Introduction
 ------------
 
 Toto-bongo is a git-powered, minimalist blog engine forked from toto. 
@@ -19,29 +19,41 @@ to security vulnerabilities, toto-bongo has non of that.
 
 blog in your app in 10 seconds
 ------------------
-
-Toto-bongo was designed to be used with a reverse-proxy cache, such as [Varnish](http://varnish-cache.org).
-This makes it an ideal candidate for **[heroku](http://heroku.com)**.
-
 This is how to deploy in your existing app:
 
 1. git clone git@github.com:danpal/toto-bongo-blog.git
+
 2. Look at toto-bongo-blog Gemfile, add the following gems to your
    Gemfile.
-  
-  -gem 'toto-bongo'
-  
-  -gem 'RedCloth'
-  
-  -gem 'haml'
-  
-3. Toto-bongo runs on rack, you need to modify your existing config.ru
-we provide you with an already existing config.ru, take a look at toto-bongo-blog
-config.ru
 
-Then make the following changes
-  1. Change :title
-  2. Run TotoBongoBlog::Application #change for your application name
+  - gem 'toto-bongo'
+
+  - gem 'RedCloth'
+
+  - gem 'haml'
+
+  - gem 'sass' #if you want to use the sass stylesheet
+  
+  
+3. Replace the config.ru on your application to the one from toto-bongo-blog. Then modify accordingly.
+    
+    Toto-bongo runs on rack, you need to modify your existing config.ru
+    we provide you with an already existing config.ru, take a look at toto-bongo-blog
+    config.ru
+  
+  make the following changes
+    1. Change :title
+    2. Run TotoBongoBlog::Application #change for your application name
+
+
+4. Copy the blog directory into your application root folder.
+
+5. Copy the blog.sass stylesheet or blog.css from /public/stylesheets/sass/blog.sass or /public/stylesheets/sass/blog.css
+to your app stylesheets.
+
+
+You are done.
+
 
 how it works
 ------------
