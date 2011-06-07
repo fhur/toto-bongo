@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = %q{toto-bongo}
-  s.version = "1.0.2"
+  s.version = "1.0.3"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Daniel Palacio"]
-  s.date = %q{2011-05-10}
+  s.date = %q{2011-06-07}
   s.description = %q{Minimal blog to use with your existing app}
   s.extra_rdoc_files = [
     "LICENSE",

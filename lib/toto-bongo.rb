@@ -4,7 +4,7 @@ require 'haml'
 require 'rack'
 require 'digest'
 require 'open-uri'
-require 'RedCloth'
+require 'rdiscount'
 require 'builder'
 require 'logger'
 $:.unshift File.dirname(__FILE__)
@@ -51,12 +51,12 @@ module TotoBongo
   if(ENV['TOTODEBUG'])
     @logger.level = Logger::DEBUG
   end
-  
+ 
   #
   # Handles all templating options
   # Is responsible for:
   # 1. Calling the Haml engine on pages to render them to html
-  # 2. Calling the Textile engine on textile text to render them to html
+  # 2. Calling the markdown engine on markdown text to render them to html
   # 3. Registering All the classes at initialization 
   #
   module Template
@@ -73,11 +73,17 @@ module TotoBongo
     end
 
     #
-    #Converst a textile text into html
+    #Converst a markdown text into html
     #
-    def textile text
-     TotoBongo::logger.debug("Called Template::Textile")
-     RedCloth.new(text.to_s.strip).to_html
+    def markdown text
+     TotoBongo::logger.debug("Called Template::Markdown")
+     if (options = @config[:markdown])
+        Markdown.new(text.to_s.strip, *(options.eql?(true) ? [] : options)).to_html
+      else
+        text.strip
+      end
+     
+     Markdown.new(text.to_s.strip).to_html
     end
 
     #
@@ -385,7 +391,7 @@ module TotoBongo
       else
         self[:body].match(/(.{1,#{length || config[:length] || config[:max]}}.*?)(\n|\Z)/m).to_s
       end
-      textile(sum.length == self[:body].length ? sum : sum.strip.sub(/\.\Z/, '&hellip;'))
+      markdown(sum.length == self[:body].length ? sum : sum.strip.sub(/\.\Z/, '&hellip;'))
     end
 
     def url
@@ -396,7 +402,7 @@ module TotoBongo
 
     def body
       TotoBongo::logger.debug("Article::body")
-      textile self[:body].sub(@config[:summary][:delim], '') rescue textile self[:body]
+      markdown self[:body].sub(@config[:summary][:delim], '') rescue markdown self[:body]
     end
     
     #Path returns a SEO friendly URL path
@@ -453,6 +459,7 @@ module TotoBongo
       :author => ENV['USER'],                               # blog author
       :title => Dir.pwd.split('/').last,                    # blog index title
       :description => "Blog for your existing rails app",   # blog meta description
+      :markdown => :smart,                                  # use markdown
       :keywords => "blog rails existing",                   # blog meta keywords
       :root => "index",                                     # site index
       :url => "http://127.0.0.1",                           # root URL of the site
@@ -470,9 +477,8 @@ module TotoBongo
       }
     }
 
-    
     def initialize obj
-    
+
       self.update Defaults
       self.update obj
     end
@@ -494,14 +500,13 @@ module TotoBongo
   # The HTTP server
   class Server
     attr_reader :config, :site
-    
+
     def initialize config = {}, &blk
       @config = config.is_a?(Config) ? config : Config.new(config)
       @config.instance_eval(&blk) if block_given?
       @site = TotoBongo::Site.new(@config)
     end
 
-  
     #
     # This is the entry point of the request
     # On each request, this is the first method that gets
