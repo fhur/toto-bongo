@@ -14,7 +14,7 @@ require 'ext/ext'
 #
 # TotoBongo
 #
-# TotoBongo Consits of the following
+# TotoBongo Consists of the following
 # 
 # Module TotoBongo
 #   encapsulates the app
